@@ -21,13 +21,14 @@ namespace Postgres01
         private void btnOpen_Click(object sender, EventArgs e)
         {
             try
-            {
-                // PostgeSQL-style connection string
-                string connstring = "Server=" + txtServer.Text + "; Port=5432;" +
-                  "User Id=" + txtUser.Text + "; Password=" + txtPwd.Text + "; Database=" + txtDb.Text;
-
+            {          
                 // make a connection object using the SQLite dataprovider
-                dbConnection = new NpgsqlConnection(connstring);
+                if (rbHome.Checked) { 
+                 dbConnection = new NpgsqlConnection(dbSource.home);
+                }
+                else {
+                 dbConnection = new NpgsqlConnection(dbSource.work);
+                }
 
                 //try to open the connection
                 dbConnection.Open();
