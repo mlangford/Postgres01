@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
+using Npgsql;
 
 namespace Postgres01
 {
@@ -15,6 +14,40 @@ namespace Postgres01
         public Form1()
         {
             InitializeComponent();
+        }
+
+        NpgsqlConnection dbConnection;
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // PostgeSQL-style connection string
+                string connstring = "Server=" + txtServer.Text + "; Port=5432;" +
+                  "User Id=" + txtUser.Text + "; Password=" + txtPwd.Text + "; Database=" + txtDb.Text;
+
+                // make a connection object using the SQLite dataprovider
+                dbConnection = new NpgsqlConnection(connstring);
+
+                //try to open the connection
+                dbConnection.Open();
+                label1.Text = "Connection state: " + dbConnection.State.ToString();
+                btnOpen.Enabled = false;
+                btnClose.Enabled = true;
+            }
+            catch (Exception msg)
+            {
+                MessageBox.Show(msg.ToString());
+            }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            //try to close the connection
+            dbConnection.Close();
+            label1.Text = "Connection state: " + dbConnection.State.ToString();
+            btnOpen.Enabled = true;
+            btnClose.Enabled = false;
         }
     }
 }
